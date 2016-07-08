@@ -1,0 +1,16 @@
+---
+- include: redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Clone SkyDive repository
+  git:
+    repo: https://github.com/skydive-project/skydive.git
+    dest: /opt/skydive
+#
+# - name: Build
+#   make:
+#     chdir: /opt/skydive
+#     target: install

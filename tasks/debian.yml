@@ -1,0 +1,27 @@
+---
+- name: Elasticsearch - Import GPG key
+  apt_key:
+    state: present
+    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+
+- name: Elasticsearch - Sourcefile
+  copy:
+    src: elasticsearch.list
+    dest: /etc/apt/sources.list.d/
+
+- name: Install dependencies
+  apt:
+    state: present
+    update_cache: yes
+    name: {{ item }}
+  with_items:
+    - elasticsearch
+    - libpcap
+    - git
+    - java-1.8.0-openjdk
+
+- name: Start elasticsearch service
+  service:
+    enabled: yes
+    state: started
+    name: elasticsearch
