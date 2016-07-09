@@ -1,0 +1,13 @@
+[Unit]
+Description=Skydive {{ sd_service_type }} daemon
+
+[Service]
+EnvironmentFile=/etc/sysconfig/skydive-{{ sd_service_type }}
+ExecStart=/usr/local/bin/skydive $SKYDIVE_OPTS {{ sd_service_type }}
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target

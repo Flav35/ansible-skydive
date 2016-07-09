@@ -16,9 +16,10 @@
     name: {{ item }}
   with_items:
     - elasticsearch
-    - libpcap
+    - libpcap-dev
     - git
     - java-1.8.0-openjdk
+    - gcc
 
 - name: Start elasticsearch service
   service:

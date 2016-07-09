@@ -1,0 +1,2 @@
+---
+redhat_go_dir: "{{ env_gopath.stdout }}/src/github.com/redhat-cip"

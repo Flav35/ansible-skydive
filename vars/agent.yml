@@ -1,0 +1,7 @@
+sd_port: 8081
+sd_analyzers: "127.0.0.1:8082"
+sd_username: "admin"
+sd_password: "password"
+sd_topology_probes: [ "netlink", "netns" ]
+sd_flow_probes: []
+sd_node_information: "Compute node"

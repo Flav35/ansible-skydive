@@ -1,16 +1,69 @@
 ---
-- include: redhat.yml
+# Elasticsearch and others dependencies
+
+- name: Dependencies RedHat
+  include: redhat.yml
   when: ansible_os_family == 'RedHat'
 
-- include: debian.yml
+- name: Dependencies Debian
+  include: debian.yml
   when: ansible_os_family == 'Debian'
 
-- name: Clone SkyDive repository
+# Skydive installation
+
+- name: Register GOPATH
+  shell: source /etc/profile.d/go-path.sh && echo $GOPATH
+  register: env_gopath
+
+- name: Skydive - Create directory
+  file:
+    path: "{{ redhat_go_dir }}"
+    state: directory
+
+- name: Skydive - Clone repository
   git:
     repo: https://github.com/skydive-project/skydive.git
-    dest: /opt/skydive
-#
-# - name: Build
-#   make:
-#     chdir: /opt/skydive
-#     target: install
+    dest: "{{ redhat_go_dir }}/skydive"
+
+- name: Skydive - Install Go dependencies
+  make:
+    chdir: "{{ redhat_go_dir }}/skydive"
+    target: install
+
+- name: Skydive - Create symlink
+  file:
+    src: "{{ env_gopath.stdout }}/bin/skydive"
+    dest: "/usr/local/bin/skydive"
+    state: "link"
+    force: yes
+
+# Skydive service
+
+- name: Skydive service - Create conf directory
+  file:
+    path: "/etc/skydive"
+    state: directory
+
+- name: Skydive service - Include vars
+  include_vars: "{{ sd_service_type }}.yml"
+
+- name: Skydive service - Create conf file
+  template:
+    src: skydive.yml.j2
+    dest: "/etc/skydive/skydive-{{ sd_service_type }}.yml"
+
+- name: Skydive service - Create var file
+  template:
+    src: skydive.j2
+    dest: "/etc/sysconfig/skydive-{{ sd_service_type }}"
+
+- name: Skydive service - Create systemd unit file
+  template:
+    src: skydive.service.j2
+    dest: "/etc/systemd/system/skydive-{{ sd_service_type }}.service"
+
+- name: Skydive service - Enable and start service
+  service:
+    name: "skydive-{{ sd_service_type }}"
+    enabled: yes
+    state: started
