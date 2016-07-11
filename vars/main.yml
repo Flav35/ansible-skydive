@@ -1,2 +1,3 @@
 ---
+skydive_binary_url: "https://github.com/skydive-project/skydive/releases/download/v0.3.0/skydive"
 redhat_go_dir: "{{ env_gopath.stdout }}/src/github.com/redhat-cip"

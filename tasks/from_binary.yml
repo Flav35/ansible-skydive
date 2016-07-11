@@ -1,0 +1,7 @@
+---
+# At this time (11/07/2016) there's still some bugs with binary (ex: "skydive agent" doesn't handle SIGTERM). Better to build from sources ;)
+- name: Download binary from https://github.com/skydive-project/
+  get_url:
+    url: "{{ skydive_binary_url }}"
+    dest: "/usr/local/bin/skydive"
+    mode: 0755

@@ -1,0 +1,44 @@
+---
+# Install from source repository. Need a working go env >=1.5
+
+- name: Register GOPATH
+  shell: source /etc/profile.d/go-path.sh && echo $GOPATH
+  register: env_gopath
+  ignore_errors: True
+
+- name: Test Go env - Exists
+  fail:
+    msg: "Working Go env not found or $GOPATH need to be set"
+  when: env_gopath|failed
+
+- name: Get Go version
+  shell: go --version
+  register: go_version 
+  ignore_errors: True
+
+- name: Test Go env - Version
+  fail:
+    msg: "Go version must be >=1.5, actual is : {{ go_version }}"
+  when: go_version >= "1.5"
+
+- name: Skydive - Create directory
+  file:
+    path: "{{ redhat_go_dir }}"
+    state: directory
+
+- name: Skydive - Clone repository
+  git:
+    repo: https://github.com/skydive-project/skydive.git
+    dest: "{{ redhat_go_dir }}/skydive"
+
+- name: Skydive - Install Go dependencies
+  make:
+    chdir: "{{ redhat_go_dir }}/skydive"
+    target: install
+
+- name: Skydive - Create symlink
+  file:
+    src: "{{ env_gopath.stdout }}/bin/skydive"
+    dest: "/usr/local/bin/skydive"
+    state: "link"
+    force: yes

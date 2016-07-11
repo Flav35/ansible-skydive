@@ -31,11 +31,13 @@ agent:
     {% for item in sd_topology_probes %}
       - {{ item }}
     {% endfor %}
+  {% if sd_flow_probes %}
   flow:
     probes:
     {% for item in sd_flow_probes %}
       - {{ item }}
     {% endfor %}
+  {% endif %}
     
   metadata:
     info: {{ sd_node_information }}

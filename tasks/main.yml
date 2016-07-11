@@ -10,32 +10,13 @@
   when: ansible_os_family == 'Debian'
 
 # Skydive installation
+- name: Install from sources
+  include: from_sources.yml
+  when: from_sources == 'yes'
 
-- name: Register GOPATH
-  shell: source /etc/profile.d/go-path.sh && echo $GOPATH
-  register: env_gopath
-
-- name: Skydive - Create directory
-  file:
-    path: "{{ redhat_go_dir }}"
-    state: directory
-
-- name: Skydive - Clone repository
-  git:
-    repo: https://github.com/skydive-project/skydive.git
-    dest: "{{ redhat_go_dir }}/skydive"
-
-- name: Skydive - Install Go dependencies
-  make:
-    chdir: "{{ redhat_go_dir }}/skydive"
-    target: install
-
-- name: Skydive - Create symlink
-  file:
-    src: "{{ env_gopath.stdout }}/bin/skydive"
-    dest: "/usr/local/bin/skydive"
-    state: "link"
-    force: yes
+- name: Install from binary only
+  include: from_binary.yml
+  when: from_sources != 'yes'
 
 # Skydive service
 

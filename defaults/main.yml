@@ -1,4 +1,5 @@
 ---
+from_sources: "no"
 sd_service_type: agent
 sd_ws_pong_timeout: 5
 sd_cache_expire: 300
