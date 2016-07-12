@@ -17,9 +17,16 @@
   with_items:
     - elasticsearch
     - libpcap-devel
-    - git
     - java-1.8.0-openjdk
+
+- name: Install dependencies if from_sources is True
+  yum:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - git
     - gcc
+  when: from_sources
 
 - name: Start elasticsearch service
   service:

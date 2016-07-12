@@ -16,7 +16,7 @@
 
 - name: Install from binary only
   include: from_binary.yml
-  when: !from_sources
+  when: not from_sources
 
 # Skydive service
 
