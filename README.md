@@ -14,7 +14,7 @@ Role Vars
 --------------
 ### Base
 ```
-from_sources: yes/no
+from_sources: True/False
 ```
 ### Skydive service type
 ```

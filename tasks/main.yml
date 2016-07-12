@@ -12,11 +12,11 @@
 # Skydive installation
 - name: Install from sources
   include: from_sources.yml
-  when: from_sources == 'yes'
+  when: from_sources
 
 - name: Install from binary only
   include: from_binary.yml
-  when: from_sources != 'yes'
+  when: !from_sources
 
 # Skydive service
 
