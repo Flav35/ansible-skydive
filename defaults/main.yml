@@ -1,4 +1,5 @@
 ---
+sd_binary_url: "https://github.com/skydive-project/skydive/releases/download/v0.3.0/skydive"
 from_sources: False
 sd_service_type: agent
 sd_ws_pong_timeout: 5
