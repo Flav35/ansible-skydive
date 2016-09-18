@@ -1,29 +1,38 @@
 ---
-- name: Elasticsearch - Import GPG key
-  apt_key:
-    state: present
-    url: https://packages.elastic.co/GPG-KEY-elasticsearch
+- block:
+  - name: Elasticsearch - Import GPG key
+    apt_key:
+      state: present
+      url: https://packages.elastic.co/GPG-KEY-elasticsearch
 
-- name: Elasticsearch - Sourcefile
-  copy:
-    src: elasticsearch.list
-    dest: /etc/apt/sources.list.d/
+  - name: Elasticsearch - Sourcefile
+    copy:
+      src: elasticsearch.list
+      dest: /etc/apt/sources.list.d/
 
-- name: Https transport...
-  apt:
-    state: present
-    update_cache: no
-    name: apt-transport-https
+  - name: Https transport...
+    apt:
+      state: present
+      update_cache: no
+      name: apt-transport-https
 
-- name: Install dependencies
-  apt:
-    state: present
-    update_cache: yes
-    name: "{{ item }}"
-  with_items:
-    - elasticsearch
-    - libpcap-dev
-    - openjdk-7-jre
+  - name: Install dependencies
+    apt:
+      state: present
+      update_cache: yes
+      name: "{{ item }}"
+    with_items:
+      - elasticsearch
+      - libpcap-dev
+      - openjdk-7-jre
+
+  - name: Start elasticsearch service
+    service:
+      enabled: yes
+      state: started
+      name: elasticsearch
+
+  when: sd_es_install
 
 - name: Install dependencies if from_sources is True
   apt:
@@ -33,9 +42,3 @@
     - git
     - gcc
   when: from_sources
-
-- name: Start elasticsearch service
-  service:
-    enabled: yes
-    state: started
-    name: elasticsearch

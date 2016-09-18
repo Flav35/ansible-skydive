@@ -70,7 +70,7 @@ netns:
   # run_path: /var/run/netns
 
 storage:
-  elasticsearch: 127.0.0.1:9200
+  elasticsearch: {{ sd_es_host }}
 
 graph:
   # graph backend memory, titangraph, gremlin(generic gremlin based), orientdb

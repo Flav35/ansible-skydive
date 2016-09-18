@@ -1,23 +1,32 @@
 ---
-- name: Elasticsearch - Import GPG key
-  rpm_key:
-    state: present
-    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+- block:
+  - name: Elasticsearch - Import GPG key
+    rpm_key:
+      state: present
+      key: https://packages.elastic.co/GPG-KEY-elasticsearch
 
-- name: Elasticsearch - Repofile
-  copy:
-    src: elasticsearch.repo
-    dest: /etc/yum.repos.d/
+  - name: Elasticsearch - Repofile
+    copy:
+      src: elasticsearch.repo
+      dest: /etc/yum.repos.d/
 
-- name: Install dependencies
-  yum:
-    state: present
-    update_cache: yes
-    name: "{{ item }}"
-  with_items:
-    - elasticsearch
-    - libpcap-devel
-    - java-1.8.0-openjdk
+  - name: Install dependencies
+    yum:
+      state: present
+      update_cache: yes
+      name: "{{ item }}"
+    with_items:
+      - elasticsearch
+      - libpcap-devel
+      - java-1.8.0-openjdk
+
+  - name: Start elasticsearch service
+    service:
+      enabled: yes
+      state: started
+      name: elasticsearch
+
+  when: sd_es_install
 
 - name: Install dependencies if from_sources is True
   yum:
@@ -27,9 +36,3 @@
     - git
     - gcc
   when: from_sources
-
-- name: Start elasticsearch service
-  service:
-    enabled: yes
-    state: started
-    name: elasticsearch
