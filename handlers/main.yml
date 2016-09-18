@@ -1,0 +1,8 @@
+- name: Reload systemd
+  shell: systemctl daemon-reload
+
+- name: Restart skydive
+  service:
+    name: skydive-{{ sd_service_type }}
+    state: restarted
+    enabled: yes
