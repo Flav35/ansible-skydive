@@ -14,7 +14,7 @@ openstack:
 
 {% if sd_service_type == "analyzer" %}
 analyzer:
-  listen: {{ sd_port }}
+  listen: {{ sd_host }}:{{ sd_analyzer_port }}
   flowtable_expire: {{ sd_flowtable_expire }}
   flowtable_update: {{ sd_flowtable_update }}
   flowtable_agent_ratio: {{ sd_flowtable_agent_ratio }}
@@ -22,7 +22,7 @@ analyzer:
 
 {% if sd_service_type == "agent" %}
 agent:
-  listen: {{ sd_port }}
+  listen: {{ sd_host }}:{{ sd_agent_port }}
   analyzers: {{ sd_analyzers }}
   analyzer_username: {{ sd_username }}
   analyzer_password: {{ sd_password }}

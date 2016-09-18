@@ -1,4 +1,3 @@
-sd_port: 8081
 sd_analyzers: "127.0.0.1:8082"
 sd_username: "admin"
 sd_password: "password"
